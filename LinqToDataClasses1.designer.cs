@@ -33,6 +33,9 @@ namespace SQLAndLINQ
     partial void InsertUniversity(University instance);
     partial void UpdateUniversity(University instance);
     partial void DeleteUniversity(University instance);
+    partial void InsertSTUDENT(STUDENT instance);
+    partial void UpdateSTUDENT(STUDENT instance);
+    partial void DeleteSTUDENT(STUDENT instance);
     #endregion
 		
 		public LinqToDataClasses1DataContext() : 
@@ -72,6 +75,14 @@ namespace SQLAndLINQ
 				return this.GetTable<University>();
 			}
 		}
+		
+		public System.Data.Linq.Table<STUDENT> STUDENTs
+		{
+			get
+			{
+				return this.GetTable<STUDENT>();
+			}
+		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.University")]
@@ -83,6 +94,8 @@ namespace SQLAndLINQ
 		private int _Id;
 		
 		private string _UniversityName;
+		
+		private EntitySet<STUDENT> _STUDENTs;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -96,6 +109,7 @@ namespace SQLAndLINQ
 		
 		public University()
 		{
+			this._STUDENTs = new EntitySet<STUDENT>(new Action<STUDENT>(this.attach_STUDENTs), new Action<STUDENT>(this.detach_STUDENTs));
 			OnCreated();
 		}
 		
@@ -135,6 +149,230 @@ namespace SQLAndLINQ
 					this._UniversityName = value;
 					this.SendPropertyChanged("UniversityName");
 					this.OnUniversityNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="University_STUDENT", Storage="_STUDENTs", ThisKey="Id", OtherKey="UniversityID")]
+		public EntitySet<STUDENT> STUDENTs
+		{
+			get
+			{
+				return this._STUDENTs;
+			}
+			set
+			{
+				this._STUDENTs.Assign(value);
+			}
+		}
+		
+		public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangedEventHandler PropertyChanged;
+		
+		protected virtual void SendPropertyChanging()
+		{
+			if ((this.PropertyChanging != null))
+			{
+				this.PropertyChanging(this, emptyChangingEventArgs);
+			}
+		}
+		
+		protected virtual void SendPropertyChanged(String propertyName)
+		{
+			if ((this.PropertyChanged != null))
+			{
+				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+			}
+		}
+		
+		private void attach_STUDENTs(STUDENT entity)
+		{
+			this.SendPropertyChanging();
+			entity.University = this;
+		}
+		
+		private void detach_STUDENTs(STUDENT entity)
+		{
+			this.SendPropertyChanging();
+			entity.University = null;
+		}
+	}
+	
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.STUDENT")]
+	public partial class STUDENT : INotifyPropertyChanging, INotifyPropertyChanged
+	{
+		
+		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+		
+		private int _Id;
+		
+		private string _Name;
+		
+		private string _Gender;
+		
+		private int _Age;
+		
+		private int _UniversityID;
+		
+		private EntityRef<University> _University;
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
+    partial void OnValidate(System.Data.Linq.ChangeAction action);
+    partial void OnCreated();
+    partial void OnIdChanging(int value);
+    partial void OnIdChanged();
+    partial void OnNameChanging(string value);
+    partial void OnNameChanged();
+    partial void OnGenderChanging(string value);
+    partial void OnGenderChanged();
+    partial void OnAgeChanging(int value);
+    partial void OnAgeChanged();
+    partial void OnUniversityIDChanging(int value);
+    partial void OnUniversityIDChanged();
+    #endregion
+		
+		public STUDENT()
+		{
+			this._University = default(EntityRef<University>);
+			OnCreated();
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		public int Id
+		{
+			get
+			{
+				return this._Id;
+			}
+			set
+			{
+				if ((this._Id != value))
+				{
+					this.OnIdChanging(value);
+					this.SendPropertyChanging();
+					this._Id = value;
+					this.SendPropertyChanged("Id");
+					this.OnIdChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Name", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Name
+		{
+			get
+			{
+				return this._Name;
+			}
+			set
+			{
+				if ((this._Name != value))
+				{
+					this.OnNameChanging(value);
+					this.SendPropertyChanging();
+					this._Name = value;
+					this.SendPropertyChanged("Name");
+					this.OnNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Gender", DbType="NVarChar(50) NOT NULL", CanBeNull=false)]
+		public string Gender
+		{
+			get
+			{
+				return this._Gender;
+			}
+			set
+			{
+				if ((this._Gender != value))
+				{
+					this.OnGenderChanging(value);
+					this.SendPropertyChanging();
+					this._Gender = value;
+					this.SendPropertyChanged("Gender");
+					this.OnGenderChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Age", DbType="Int NOT NULL")]
+		public int Age
+		{
+			get
+			{
+				return this._Age;
+			}
+			set
+			{
+				if ((this._Age != value))
+				{
+					this.OnAgeChanging(value);
+					this.SendPropertyChanging();
+					this._Age = value;
+					this.SendPropertyChanged("Age");
+					this.OnAgeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_UniversityID", DbType="Int NOT NULL")]
+		public int UniversityID
+		{
+			get
+			{
+				return this._UniversityID;
+			}
+			set
+			{
+				if ((this._UniversityID != value))
+				{
+					if (this._University.HasLoadedOrAssignedValue)
+					{
+						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
+					}
+					this.OnUniversityIDChanging(value);
+					this.SendPropertyChanging();
+					this._UniversityID = value;
+					this.SendPropertyChanged("UniversityID");
+					this.OnUniversityIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="University_STUDENT", Storage="_University", ThisKey="UniversityID", OtherKey="Id", IsForeignKey=true, DeleteOnNull=true, DeleteRule="CASCADE")]
+		public University University
+		{
+			get
+			{
+				return this._University.Entity;
+			}
+			set
+			{
+				University previousValue = this._University.Entity;
+				if (((previousValue != value) 
+							|| (this._University.HasLoadedOrAssignedValue == false)))
+				{
+					this.SendPropertyChanging();
+					if ((previousValue != null))
+					{
+						this._University.Entity = null;
+						previousValue.STUDENTs.Remove(this);
+					}
+					this._University.Entity = value;
+					if ((value != null))
+					{
+						value.STUDENTs.Add(this);
+						this._UniversityID = value.Id;
+					}
+					else
+					{
+						this._UniversityID = default(int);
+					}
+					this.SendPropertyChanged("University");
 				}
 			}
 		}

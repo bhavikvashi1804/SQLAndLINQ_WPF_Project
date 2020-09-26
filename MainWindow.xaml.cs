@@ -28,17 +28,51 @@ namespace SQLAndLINQ
             string connectionString = ConfigurationManager.ConnectionStrings["SQLAndLINQ.Properties.Settings.DBDemoConnectionString"].ConnectionString;
             linqToDataClasses1DataContext = new LinqToDataClasses1DataContext(connectionString);
 
-            InsertUniversity();
+            InsertStudents();
+           
         }
 
 
         public void InsertUniversity()
         {
+
+            linqToDataClasses1DataContext.ExecuteCommand("delete from University");
+            
             University university = new University { UniversityName = "GTU" };
             linqToDataClasses1DataContext.Universities.InsertOnSubmit(university);
+            University university1 = new University { UniversityName = "DDU" };
+            linqToDataClasses1DataContext.Universities.InsertOnSubmit(university1);
             linqToDataClasses1DataContext.SubmitChanges();
 
             MainDataGrid.ItemsSource = linqToDataClasses1DataContext.Universities;
+        }
+
+
+        public void InsertStudents()
+        {
+
+            linqToDataClasses1DataContext.ExecuteCommand("delete from Student");
+
+            //get the GTU university using lambda funtion
+            University gtuUniversity = linqToDataClasses1DataContext.Universities.First(university => university.UniversityName.Equals("GTU"));
+
+            University dduUniversity = linqToDataClasses1DataContext.Universities.First(university => university.UniversityName.Equals("DDU"));
+
+
+
+            List<STUDENT> studentList = new List<STUDENT>();
+            studentList.Add(new STUDENT { Name = "Bhavik Vashi", Age = 22, Gender="Male",UniversityID=gtuUniversity.Id});
+            studentList.Add(new STUDENT { Name = "Raj Patel", Age = 21, Gender = "Male", UniversityID = gtuUniversity.Id });
+            studentList.Add(new STUDENT { Name = "Yash Patel", Age = 23, Gender = "Male", UniversityID = gtuUniversity.Id });
+            studentList.Add(new STUDENT { Name = "Paras Patel", Age = 21, Gender = "Male", University=dduUniversity });
+            studentList.Add(new STUDENT { Name = "Rani Patel", Age = 22, Gender = "Female", University=dduUniversity });
+            studentList.Add(new STUDENT { Name = "Palak Patel", Age = 22, Gender = "Female", University=gtuUniversity });
+
+
+            linqToDataClasses1DataContext.STUDENTs.InsertAllOnSubmit(studentList);
+
+            linqToDataClasses1DataContext.SubmitChanges();
+            MainDataGrid.ItemsSource = linqToDataClasses1DataContext.STUDENTs;
         }
     }
 }
