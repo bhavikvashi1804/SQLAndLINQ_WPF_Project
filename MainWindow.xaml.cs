@@ -28,7 +28,7 @@ namespace SQLAndLINQ
             string connectionString = ConfigurationManager.ConnectionStrings["SQLAndLINQ.Properties.Settings.DBDemoConnectionString"].ConnectionString;
             linqToDataClasses1DataContext = new LinqToDataClasses1DataContext(connectionString);
 
-            InsertStudents();
+            InsertLectures();
            
         }
 
@@ -73,6 +73,21 @@ namespace SQLAndLINQ
 
             linqToDataClasses1DataContext.SubmitChanges();
             MainDataGrid.ItemsSource = linqToDataClasses1DataContext.STUDENTs;
+        }
+
+        public void InsertLectures()
+        {
+
+            linqToDataClasses1DataContext.ExecuteCommand("delete from Lecture");
+
+            linqToDataClasses1DataContext.Lectures.InsertOnSubmit(new Lecture { Name="Math"});
+            linqToDataClasses1DataContext.Lectures.InsertOnSubmit(new Lecture { Name = "Phy" });
+            linqToDataClasses1DataContext.Lectures.InsertOnSubmit(new Lecture { Name = "Chem" });
+            linqToDataClasses1DataContext.Lectures.InsertOnSubmit(new Lecture { Name = "Bio" });
+
+            linqToDataClasses1DataContext.SubmitChanges();
+            MainDataGrid.ItemsSource = linqToDataClasses1DataContext.Lectures;
+
         }
     }
 }
