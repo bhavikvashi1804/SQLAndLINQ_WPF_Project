@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DBDemo" Class="LinqToDataClasses1DataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=DESKTOP-5QQN1D4;Initial Catalog=DBDemo;Integrated Security=True" SettingsObjectName="SQLAndLINQ.Properties.Settings" SettingsPropertyName="DBDemoConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.University" Member="Universities">
+    <Type Name="University">
+      <Column Name="Id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UniversityName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+</Database>

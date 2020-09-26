@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Configuration;
 
 namespace SQLAndLINQ
 {
@@ -20,9 +21,24 @@ namespace SQLAndLINQ
     /// </summary>
     public partial class MainWindow : Window
     {
+        LinqToDataClasses1DataContext linqToDataClasses1DataContext;
         public MainWindow()
         {
             InitializeComponent();
+            string connectionString = ConfigurationManager.ConnectionStrings["SQLAndLINQ.Properties.Settings.DBDemoConnectionString"].ConnectionString;
+            linqToDataClasses1DataContext = new LinqToDataClasses1DataContext(connectionString);
+
+            InsertUniversity();
+        }
+
+
+        public void InsertUniversity()
+        {
+            University university = new University { UniversityName = "GTU" };
+            linqToDataClasses1DataContext.Universities.InsertOnSubmit(university);
+            linqToDataClasses1DataContext.SubmitChanges();
+
+            MainDataGrid.ItemsSource = linqToDataClasses1DataContext.Universities;
         }
     }
 }
